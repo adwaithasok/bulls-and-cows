@@ -5,7 +5,7 @@ class Result {
   final int bulls;
   final int cows;
 
-  Result(this.bulls, this.cows);
+  const Result(this.bulls, this.cows);
 }
 
 class GameSetupProvider extends ChangeNotifier {
@@ -25,7 +25,6 @@ class GameSetupProvider extends ChangeNotifier {
   bool _isPlayer1Completed = false;
   bool _isStartButtonEnabled = false;
   bool _noMatch = false;
-  bool get noMatch => _noMatch;
 
   String get player1Name => _player1Name;
   String get player2Name => _player2Name;
@@ -40,9 +39,7 @@ class GameSetupProvider extends ChangeNotifier {
   bool get isGameWon => _isGameWon;
   bool get isPlayer1Completed => _isPlayer1Completed;
   bool get isStartButtonEnabled => _isStartButtonEnabled;
-
-  String get player1Guess => _player1Guess;
-  String get player2Guess => _player2Guess;
+  bool get noMatch => _noMatch;
 
   void updatePlayer1Guess(String guess) {
     _player1Guess = guess;
@@ -51,14 +48,10 @@ class GameSetupProvider extends ChangeNotifier {
 
   void updatePlayerGuess(String guess) {
     if (_currentPlayerIndex == 0) {
-      updatePlayer1Guess(guess);
+      _player1Guess = guess;
     } else {
-      updatePlayer2Guess(guess);
+      _player2Guess = guess;
     }
-  }
-
-  void updatePlayer2Guess(String guess) {
-    _player2Guess = guess;
     notifyListeners();
   }
 
@@ -103,7 +96,6 @@ class GameSetupProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // pseudo code for executing game logic as per the task
   void submitGuess(String guess, BuildContext context) {
     if (_isGameActive && guess.length == 4 && isUniqueDigits(guess)) {
       _currentGuess = guess;
@@ -112,21 +104,29 @@ class GameSetupProvider extends ChangeNotifier {
           : _player1SecretNumber;
       Result result = evaluateGuess(guess, opponentSecret);
 
-      _feedback = '${result.bulls} Bulls, ${result.cows} Cows';
-      _cow = result.cows;
-      _bull = result.bulls;
-      _noMatch = result.bulls == 0 && result.cows == 0;
-      print(_noMatch);
+      _updateFeedback(result);
+
       if (result.bulls == 4) {
         _isGameActive = false;
-        _handleWin(context);
         _isGameWon = true;
+        _handleWin(context);
       } else {
-        _currentPlayerIndex = 1 - _currentPlayerIndex;
+        switchPlayer();
       }
 
       notifyListeners();
     }
+  }
+
+  void _updateFeedback(Result result) {
+    _feedback = '${result.bulls} Bulls, ${result.cows} Cows';
+    _cow = result.cows;
+    _bull = result.bulls;
+    _noMatch = result.bulls == 0 && result.cows == 0;
+  }
+
+  void switchPlayer() {
+    _currentPlayerIndex = 1 - _currentPlayerIndex;
   }
 
   void _handleWin(BuildContext context) {
@@ -170,25 +170,28 @@ class GameSetupProvider extends ChangeNotifier {
   }
 
   void resetGame() {
-    _player1Name = '';
-    _player2Name = '';
-    _player1SecretNumber = '';
-    _player2SecretNumber = '';
+    _resetPlayerData();
     _currentPlayerIndex = 0;
     _currentGuess = '';
     _feedback = '';
     _isGameActive = true;
+    _isGameWon = false;
+    notifyListeners();
+  }
+
+  void _resetPlayerData() {
+    _player1Name = '';
+    _player2Name = '';
+    _player1SecretNumber = '';
+    _player2SecretNumber = '';
     _isPlayer1Completed = false;
     _isStartButtonEnabled = false;
     _noMatch = false;
-    notifyListeners();
   }
 
   bool isUniqueDigits(String number) {
     return number.split('').toSet().length == number.length;
   }
-
-  // pseudo code for executing game logic and get count of cow & bull as per the task
 
   Result evaluateGuess(String guess, String secret) {
     int bulls = 0;

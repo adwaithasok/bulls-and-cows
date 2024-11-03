@@ -97,14 +97,12 @@ class _GameScreenState extends State<GameScreen> {
                   child: TextButton(
                     onPressed: setupProvider.isGameActive
                         ? () {
+                            // Submit guess for the current player and update UI
                             setupProvider.submitGuess(
-                              setupProvider.currentPlayerIndex == 0
-                                  ? setupProvider.player1Guess
-                                  : setupProvider.player2Guess,
+                              _guessController.text,
                               context,
                             );
                             _guessController.clear();
-                            setupProvider.clearCurrentGuess();
                           }
                         : null,
                     child: const Text(
@@ -124,7 +122,7 @@ class _GameScreenState extends State<GameScreen> {
                         padding: const EdgeInsets.symmetric(horizontal: 4.0),
                         child: Image.asset(
                           AssetPaths.cowicon,
-                          width: screenWidth * 0.09,
+                          width: screenWidth * 0.2,
                         ),
                       ),
                     ),
@@ -135,7 +133,7 @@ class _GameScreenState extends State<GameScreen> {
                         padding: const EdgeInsets.symmetric(horizontal: 4.0),
                         child: Image.asset(
                           AssetPaths.bull,
-                          width: screenWidth * 0.08,
+                          width: screenWidth * 0.15,
                         ),
                       ),
                     ),
