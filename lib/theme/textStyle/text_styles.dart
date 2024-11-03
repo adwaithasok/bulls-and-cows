@@ -9,7 +9,7 @@ class AppTextStyles {
   );
 
   static const TextStyle boldPrimaryText = TextStyle(
-    color: AppColors.primaryColor,
+    color: AppColors.white,
     fontFamily: FontFamily.montserrat,
     fontWeight: FontWeight.bold,
   );
@@ -17,5 +17,6 @@ class AppTextStyles {
 
 class FontFamily {
   static const merriWeather = 'merriweather';
+  static const Chewy = 'Chewy';
   static const montserrat = 'montserrat';
 }

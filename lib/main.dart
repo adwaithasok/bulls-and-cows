@@ -1,15 +1,21 @@
+import 'package:bull_cow/provider/game_setup_provider.dart';
 import 'package:bull_cow/routes/routes.dart';
 import 'package:bull_cow/theme/appColors/app_colors.dart';
-import 'package:bull_cow/view/home_screen.dart';
-import 'package:bull_cow/view/splash_screen.dart';
-import 'package:flutter/material.dart';
+import 'package:bull_cow/utils/constants.dart';
 
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:one_context/one_context.dart';
 
 void main() {
-  // Get.put(GalleryImageController());
-
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => GameSetupProvider()),
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -18,7 +24,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Match Seekers',
+      title: AppConstants.appName,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
@@ -26,11 +32,8 @@ class MyApp extends StatelessWidget {
       ),
       builder: OneContext().builder,
       navigatorKey: OneContext().key,
-      initialRoute: RouteNames.SplashScreen,
-      routes: {
-        RouteNames.SplashScreen: (context) => SplashScreen(),
-        RouteNames.HomeScreen: (context) => HomeScreen(),
-      },
+      initialRoute: RouteNames.splashScreen,
+      onGenerateRoute: generateRoute,
     );
   }
 }

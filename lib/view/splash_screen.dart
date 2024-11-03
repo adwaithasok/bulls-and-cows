@@ -1,23 +1,32 @@
-import 'package:bull_cow/main.dart';
-import 'package:bull_cow/view/home_screen.dart';
+import 'package:bull_cow/routes/routes.dart';
+import 'package:bull_cow/theme/appColors/app_colors.dart';
+import 'package:bull_cow/theme/textStyle/text_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:one_context/one_context.dart';
 
-class SplashScreen extends StatelessWidget {
+class SplashScreen extends StatefulWidget {
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    Future.delayed(const Duration(seconds: 2), () {
+      OneContext().pushNamed(RouteNames.rulesScreen);
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    // Simulate loading time
-    Future.delayed(const Duration(seconds: 2), () {
-      // ignore: use_build_context_synchronously
-      Navigator.of(context)
-          .pushReplacement(MaterialPageRoute(builder: (_) => HomeScreen()));
-    });
-
     return const Scaffold(
-      backgroundColor: Colors.blue,
+      backgroundColor: AppColors.black,
       body: Center(
         child: Text(
           'Bulls and Cows',
-          style: TextStyle(fontSize: 30, color: Colors.white),
+          style: TextStyle(
+              fontSize: 30, color: Colors.white, fontFamily: FontFamily.Chewy),
         ),
       ),
     );

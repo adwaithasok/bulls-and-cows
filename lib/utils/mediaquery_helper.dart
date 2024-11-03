@@ -10,8 +10,4 @@ class MediaQueryHelper {
   double get safeAreaBottom => OneContext().mediaQuery.padding.bottom;
   double get safeAreaLeft => OneContext().mediaQuery.padding.left;
   double get safeAreaRight => OneContext().mediaQuery.padding.right;
-
-  bool get isWeb => kIsWeb;
-
-  bool get isMobile => !kIsWeb;
 }
